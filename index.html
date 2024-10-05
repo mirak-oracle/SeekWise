@@ -146,32 +146,122 @@
 
       <!-- Add new market data script -->
     <script>
-        // Simulated market data updates (replace with real API calls)
-        function updateMarketData() {
-            document.getElementById('btcPrice').textContent = '$' + (Math.random() * 10000 + 30000).toFixed(2);
-            document.getElementById('ethPrice').textContent = '$' + (Math.random() * 1000 + 2000).toFixed(2);
-            document.getElementById('marketCap').textContent = '$' + (Math.random() * 1 + 1).toFixed(2) + 'T';
-            
-            // Update changes
-            document.getElementById('btcChange').textContent = ((Math.random() * 10) - 5).toFixed(2) + '%';
-            document.getElementById('ethChange').textContent = ((Math.random() * 10) - 5).toFixed(2) + '%';
-            document.getElementById('marketCapChange').textContent = ((Math.random() * 10) - 5).toFixed(2) + '%';
+        // API configuration
+const CRYPTOCOMPARE_API_KEY = 'aa12fb37fff81f7e4d2b4393d16c650ab04ac119dd9c29d6b64cb2d7fe741da6';
+const BASE_URL = 'https://min-api.cryptocompare.com/data/';
+const UPDATE_INTERVAL = 5000; // 5 seconds
+
+// Cache for storing cryptocurrency data
+let cryptoCache = new Map();
+let lastUpdateTime = 0;
+const RATE_LIMIT_WINDOW = 1000; // 1 second minimum between API calls
+
+// Function to fetch cryptocurrency prices
+async function fetchCryptoPrices(cryptoSymbols) {
+    try {
+        const currentTime = Date.now();
+        if (currentTime - lastUpdateTime < RATE_LIMIT_WINDOW) {
+            console.log('Rate limit enforced, using cached data');
+            return cryptoCache;
         }
 
-        // Update market data every 5 seconds
-        updateMarketData();
-        setInterval(updateMarketData, 5000);
+        const symbols = cryptoSymbols.join(',');
+        const response = await fetch(`${BASE_URL}pricemultifull?fsyms=${symbols}&tsyms=USD&api_key=${CRYPTOCOMPARE_API_KEY}`);
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        lastUpdateTime = currentTime;
+        
+        return data.RAW || {};
+    } catch (error) {
+        console.error('Error fetching crypto prices:', error);
+        return cryptoCache; // Fall back to cached data
+    }
+}
 
-        // Refresh button handler
-        document.getElementById('refreshMarket').addEventListener('click', updateMarketData);
+// Function to fetch market cap data
+async function fetchMarketCapData() {
+    try {
+        const response = await fetch(`${BASE_URL}global/total?api_key=${CRYPTOCOMPARE_API_KEY}`);
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        return data.Data;
+    } catch (error) {
+        console.error('Error fetching market cap data:', error);
+        return null;
+    }
+}
 
-        // Timeframe selector handler
-        document.getElementById('timeframeSelect').addEventListener('change', function(e) {
-            const iframe = document.getElementById('tradingViewIframe');
-            const currentSrc = new URL(iframe.src);
-            currentSrc.searchParams.set('interval', e.target.value);
-            iframe.src = currentSrc.toString();
-        });
+// Function to update the UI with real data
+async function updateMarketData() {
+    const cryptoData = await fetchCryptoPrices(['BTC', 'ETH']);
+    const marketCapData = await fetchMarketCapData();
+
+    if (cryptoData.BTC?.USD) {
+        const btcData = cryptoData.BTC.USD;
+        document.getElementById('btcPrice').textContent = '$' + btcData.PRICE.toFixed(2);
+        document.getElementById('btcChange').textContent = btcData.CHANGEPCT24HOUR.toFixed(2) + '%';
+    }
+
+    if (cryptoData.ETH?.USD) {
+        const ethData = cryptoData.ETH.USD;
+        document.getElementById('ethPrice').textContent = '$' + ethData.PRICE.toFixed(2);
+        document.getElementById('ethChange').textContent = ethData.CHANGEPCT24HOUR.toFixed(2) + '%';
+    }
+
+    if (marketCapData) {
+        const totalMarketCap = marketCapData.total_market_cap.usd;
+        const marketCapTrillion = (totalMarketCap / 1e12).toFixed(2);
+        document.getElementById('marketCap').textContent = '$' + marketCapTrillion + 'T';
+        document.getElementById('marketCapChange').textContent = marketCapData.market_cap_change_percentage_24h_usd.toFixed(2) + '%';
+    }
+}
+
+// Function to fetch cryptocurrency options
+async function fetchCryptocurrencyOptions() {
+    try {
+        const response = await fetch(`${BASE_URL}blockchain/list?api_key=${CRYPTOCOMPARE_API_KEY}`);
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        return Object.keys(data.Data).map(key => ({
+            value: key,
+            label: data.Data[key].CoinName + ` (${key})`
+        }));
+    } catch (error) {
+        console.error('Error fetching cryptocurrency options:', error);
+        return [];
+    }
+}
+
+// Initialize the price updates
+updateMarketData();
+const updateInterval = setInterval(updateMarketData, UPDATE_INTERVAL);
+
+// Event listeners
+document.getElementById('refreshMarket').addEventListener('click', updateMarketData);
+
+document.getElementById('timeframeSelect').addEventListener('change', function(e) {
+    const iframe = document.getElementById('tradingViewIframe');
+    const currentSrc = new URL(iframe.src);
+    currentSrc.searchParams.set('interval', e.target.value);
+    iframe.src = currentSrc.toString();
+});
+
+// Cleanup function to prevent memory leaks
+window.addEventListener('beforeunload', () => {
+    clearInterval(updateInterval);
+});
     </script>
 
     <script async src="https://cse.google.com/cse.js?cx=b2707667ad4f44eb1"></script>
