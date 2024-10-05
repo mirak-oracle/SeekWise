@@ -17,6 +17,39 @@
         gtag('config', 'G-E3X65BGT5B');
     </script>
 
+    <!-- Add new styles -->
+    <style>
+        .market-section {
+            background: linear-gradient(to right, #1a237e, #0d47a1);
+            border-radius: 1rem;
+            padding: 2rem;
+            margin-top: 2rem;
+            color: white;
+        }
+        
+        .iframe-container {
+            position: relative;
+            overflow: hidden;
+            border-radius: 0.5rem;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            margin-top: 1rem;
+        }
+
+        .market-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            border-radius: 0.5rem;
+            padding: 1rem;
+            transition: transform 0.3s ease;
+        }
+
+        .market-card:hover {
+            transform: translateY(-5px);
+        }
+    </style>
+
+    
     <div class="container mx-auto mt-8 p-4">
         <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6">
             <h1 class="text-3xl font-bold text-center mb-6 text-gray-800 dark:text-white">SeekWise</h1>
@@ -56,8 +89,90 @@
                             </div>
                         </div>
 
+                    <!-- Add new Market Section -->
+    <div class="market-section">
+        <div class="flex items-center justify-between mb-6">
+            <h2 class="text-2xl font-bold flex items-center">
+                <svg class="w-8 h-8 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                          d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"/>
+                </svg>
+                Market Overview
+            </h2>
+            <div class="flex items-center space-x-4">
+                <button id="refreshMarket" class="bg-white bg-opacity-20 p-2 rounded-full hover:bg-opacity-30 transition-all">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                              d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                    </svg>
+                </button>
+                <select id="timeframeSelect" class="bg-white bg-opacity-20 text-white rounded-md px-3 py-1 outline-none">
+                    <option value="1">1m</option>
+                    <option value="5">5m</option>
+                    <option value="15">15m</option>
+                    <option value="60">1h</option>
+                    <option value="D">1d</option>
+                </select>
+            </div>
+        </div>
 
-    
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+            <div class="market-card">
+                <div class="text-sm opacity-70">Bitcoin</div>
+                <div class="text-xl font-bold" id="btcPrice">$0.00</div>
+                <div class="text-sm" id="btcChange">0.00%</div>
+            </div>
+            <div class="market-card">
+                <div class="text-sm opacity-70">Ethereum</div>
+                <div class="text-xl font-bold" id="ethPrice">$0.00</div>
+                <div class="text-sm" id="ethChange">0.00%</div>
+            </div>
+            <div class="market-card">
+                <div class="text-sm opacity-70">Market Cap</div>
+                <div class="text-xl font-bold" id="marketCap">$0.00T</div>
+                <div class="text-sm" id="marketCapChange">0.00%</div>
+            </div>
+        </div>
+
+        <!-- TradingView Widget Container -->
+        <div id="tradingViewContainer" class="iframe-container">
+            <iframe id="tradingViewIframe" 
+                    src="https://s.tradingview.com/widgetembed/?frameElementId=tradingview_1&symbol=BINANCE:BTCUSDT&interval=1&symboledit=1&saveimage=1&toolbarbg=f1f3f6&studies=[]&theme=dark&style=1&timezone=Etc%2FUTC&studies_overrides={}&overrides={}&enabled_features=[]&disabled_features=[]&locale=en" 
+                    class="w-full h-[600px] rounded-lg shadow-lg border-none"
+                    style="background: rgba(0,0,0,0.2);">
+            </iframe>
+        </div>
+    </div>
+
+      <!-- Add new market data script -->
+    <script>
+        // Simulated market data updates (replace with real API calls)
+        function updateMarketData() {
+            document.getElementById('btcPrice').textContent = '$' + (Math.random() * 10000 + 30000).toFixed(2);
+            document.getElementById('ethPrice').textContent = '$' + (Math.random() * 1000 + 2000).toFixed(2);
+            document.getElementById('marketCap').textContent = '$' + (Math.random() * 1 + 1).toFixed(2) + 'T';
+            
+            // Update changes
+            document.getElementById('btcChange').textContent = ((Math.random() * 10) - 5).toFixed(2) + '%';
+            document.getElementById('ethChange').textContent = ((Math.random() * 10) - 5).toFixed(2) + '%';
+            document.getElementById('marketCapChange').textContent = ((Math.random() * 10) - 5).toFixed(2) + '%';
+        }
+
+        // Update market data every 5 seconds
+        updateMarketData();
+        setInterval(updateMarketData, 5000);
+
+        // Refresh button handler
+        document.getElementById('refreshMarket').addEventListener('click', updateMarketData);
+
+        // Timeframe selector handler
+        document.getElementById('timeframeSelect').addEventListener('change', function(e) {
+            const iframe = document.getElementById('tradingViewIframe');
+            const currentSrc = new URL(iframe.src);
+            currentSrc.searchParams.set('interval', e.target.value);
+            iframe.src = currentSrc.toString();
+        });
+    </script>
 
     <script async src="https://cse.google.com/cse.js?cx=b2707667ad4f44eb1"></script>
     <script>
