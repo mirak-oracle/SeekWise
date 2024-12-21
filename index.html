@@ -98,19 +98,11 @@
             </div>
         </div>
 
+        <!-- Search Section -->
         <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6 mb-8">
-            <h2 class="text-2xl font-semibold mb-4 text-gray-800 dark:text-white">Visual Search Builder</h2>
-            <div id="searchBuilder" class="flex flex-wrap gap-4 mb-4">
-                <div id="keywords" class="drop-zone bg-gray-100 dark:bg-gray-700 p-4 rounded-lg flex-grow">
-                    <h3 class="font-semibold mb-2 text-gray-800 dark:text-white">Keywords</h3>
-                    <div id="keywordZone" class="min-h-[50px]"></div>
-                </div>
-                <div id="filters" class="drop-zone bg-gray-100 dark:bg-gray-700 p-4 rounded-lg flex-grow">
-                    <h3 class="font-semibold mb-2 text-gray-800 dark:text-white">Filters</h3>
-                    <div id="filterZone" class="min-h-[50px]"></div>
-                </div>
-            </div>
-            <div class="flex space-x-4">
+            <h2 class="text-2xl font-semibold mb-4 text-gray-800 dark:text-white">Search</h2>
+            <div class="flex flex-col md:flex-row gap-4 mb-4">
+                <input type="text" id="searchInput" placeholder="Enter your search query" class="flex-grow p-2 border rounded-lg dark:bg-gray-700 dark:text-white">
                 <button id="searchButton" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors">
                     Search
                 </button>
@@ -123,22 +115,38 @@
             </div>
         </div>
 
+        <!-- Visual Search Builder -->
         <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6 mb-8">
-            <h2 class="text-2xl font-semibold mb-4 text-gray-800 dark:text-white">Available Elements</h2>
-            <div id="elementPalette" class="flex flex-wrap gap-4">
+            <h2 class="text-2xl font-semibold mb-4 text-gray-800 dark:text-white">Visual Search Builder</h2>
+            <div id="searchBuilder" class="flex flex-wrap gap-4 mb-4">
+                <div id="keywords" class="drop-zone bg-gray-100 dark:bg-gray-700 p-4 rounded-lg flex-grow">
+                    <h3 class="font-semibold mb-2 text-gray-800 dark:text-white">Keywords</h3>
+                    <div id="keywordZone" class="min-h-[50px]"></div>
+                </div>
+                <div id="filters" class="drop-zone bg-gray-100 dark:bg-gray-700 p-4 rounded-lg flex-grow">
+                    <h3 class="font-semibold mb-2 text-gray-800 dark:text-white">Filters</h3>
+                    <div id="filterZone" class="min-h-[50px]"></div>
+                </div>
+            </div>
+            <div id="elementPalette" class="flex flex-wrap gap-4 mb-4">
                 <div class="draggable bg-blue-100 dark:bg-blue-700 p-2 rounded" draggable="true" data-type="keyword">Keyword</div>
                 <div class="draggable bg-green-100 dark:bg-green-700 p-2 rounded" draggable="true" data-type="filter" data-filter="site:">Site Filter</div>
                 <div class="draggable bg-yellow-100 dark:bg-yellow-700 p-2 rounded" draggable="true" data-type="filter" data-filter="filetype:">File Type Filter</div>
                 <div class="draggable bg-red-100 dark:bg-red-700 p-2 rounded" draggable="true" data-type="filter" data-filter="-">Exclude</div>
                 <div class="draggable bg-purple-100 dark:bg-purple-700 p-2 rounded" draggable="true" data-type="filter" data-filter="OR">OR Operator</div>
             </div>
+            <button id="visualSearchButton" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors">
+                Search with Visual Builder
+            </button>
         </div>
 
+        <!-- Search Results -->
         <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6 mb-8">
             <h2 class="text-2xl font-semibold mb-4 text-gray-800 dark:text-white">Search Results</h2>
-            <div class="gcse-searchresults-only"></div>
+            <div id="searchResults"></div>
         </div>
 
+        <!-- Market Data Section -->
         <div class="market-section">
             <div class="flex items-center justify-between mb-6">
                 <h2 class="text-2xl font-bold flex items-center">
@@ -175,7 +183,6 @@
         </div>
     </div>
 
-    <script async src="https://cse.google.com/cse.js?cx=b2707667ad4f44eb1"></script>
     <script>
         // Visual Search Builder
         document.addEventListener('DOMContentLoaded', () => {
@@ -183,6 +190,8 @@
             const dropZones = document.querySelectorAll('.drop-zone');
             const searchButton = document.getElementById('searchButton');
             const voiceSearchBtn = document.getElementById('voiceSearchBtn');
+            const visualSearchButton = document.getElementById('visualSearchButton');
+            const searchInput = document.getElementById('searchInput');
 
             draggables.forEach(draggable => {
                 draggable.addEventListener('dragstart', dragStart);
@@ -193,8 +202,9 @@
                 zone.addEventListener('drop', drop);
             });
 
-            searchButton.addEventListener('click', performSearch);
+            searchButton.addEventListener('click', () => performSearch(searchInput.value));
             voiceSearchBtn.addEventListener('click', performVoiceSearch);
+            visualSearchButton.addEventListener('click', performVisualSearch);
 
             function dragStart(e) {
                 e.dataTransfer.setData('text/plain', e.target.outerHTML);
@@ -244,7 +254,32 @@
                 return element;
             }
 
-            function performSearch() {
+            function performSearch(query) {
+                // Implement search functionality here
+                const searchResults = document.getElementById('searchResults');
+                searchResults.innerHTML = `<p>Searching for: ${query}</p>`;
+                // You would typically make an API call here to get actual search results
+            }
+
+            function performVoiceSearch() {
+                if ('webkitSpeechRecognition' in window) {
+                    const recognition = new webkitSpeechRecognition();
+                    recognition.continuous = false;
+                    recognition.interimResults = false;
+
+                    recognition.onresult = (event) => {
+                        const transcript = event.results[0][0].transcript;
+                        searchInput.value = transcript;
+                        performSearch(transcript);
+                    };
+
+                    recognition.start();
+                } else {
+                    alert('Voice recognition is not supported in your browser.');
+                }
+            }
+
+            function performVisualSearch() {
                 const keywordZone = document.getElementById('keywordZone');
                 const filterZone = document.getElementById('filterZone');
                 let searchQuery = '';
@@ -273,33 +308,7 @@
                 });
 
                 searchQuery = searchQuery.trim();
-                executeSearch(searchQuery);
-            }
-
-            function performVoiceSearch() {
-                if ('webkitSpeechRecognition' in window) {
-                    const recognition = new webkitSpeechRecognition();
-                    recognition.continuous = false;
-                    recognition.interimResults = false;
-
-                    recognition.onresult = (event) => {
-                        const transcript = event.results[0][0].transcript;
-                        executeSearch(transcript);
-                    };
-
-                    recognition.start();
-                } else {
-                    alert('Voice recognition is not supported in your browser.');
-                }
-            }
-
-            function executeSearch(query) {
-                const searchElement = document.querySelector('.gsc-input-box input');
-                const searchButton = document.querySelector('.gsc-search-button');
-                if (searchElement && searchButton) {
-                    searchElement.value = query;
-                    searchButton.click();
-                }
+                performSearch(searchQuery);
             }
         });
 
