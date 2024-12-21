@@ -5,7 +5,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SeekWise AI Search</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2/dist/alpine.min.js" defer></script>
     <script async src="https://cse.google.com/cse.js?cx=b2707667ad4f44eb1"></script>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-E3X65BGT5B"></script>
     <script>
@@ -62,17 +61,11 @@
         }
     </style>
 </head>
-<body class="bg-gray-100 dark:bg-gray-900 transition-colors duration-200" x-data="{ darkMode: false }" :class="{ 'dark': darkMode }">
+<body class="bg-white">
     <div class="container mx-auto px-4 py-8">
-        <div class="flex justify-between items-center mb-8">
-            <h1 class="text-4xl md:text-5xl font-bold text-center text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-600">
-                SeekWise
-            </h1>
-            <button @click="darkMode = !darkMode" class="bg-gray-200 dark:bg-gray-700 px-4 py-2 rounded-full transition-colors duration-200">
-                <span x-show="!darkMode" class="text-gray-800">🌙</span>
-                <span x-show="darkMode" class="text-white">☀️</span>
-            </button>
-        </div>
+        <h1 class="text-4xl md:text-5xl font-bold text-center mb-8 text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-purple-600">
+            SeekWise
+        </h1>
 
         <!-- Animated Icons -->
         <div class="flex items-center justify-center space-x-4 mb-8">
@@ -88,30 +81,30 @@
         </div>
 
         <!-- Search Section -->
-        <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6 mb-8 transition-colors duration-200">
-            <h2 class="text-2xl font-semibold mb-4 text-gray-800 dark:text-white">Search</h2>
+        <div class="bg-gray-100 shadow-md rounded-lg p-6 mb-8">
+            <h2 class="text-2xl font-semibold mb-4 text-gray-800">Search</h2>
             <div class="gcse-searchbox-only"></div>
         </div>
 
         <!-- Visual Search Builder -->
-        <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6 mb-8 transition-colors duration-200">
-            <h2 class="text-2xl font-semibold mb-4 text-gray-800 dark:text-white">Visual Search Builder</h2>
+        <div class="bg-gray-100 shadow-md rounded-lg p-6 mb-8">
+            <h2 class="text-2xl font-semibold mb-4 text-gray-800">Visual Search Builder</h2>
             <div id="searchBuilder" class="flex flex-wrap gap-4 mb-4">
-                <div id="keywords" class="drop-zone bg-gray-100 dark:bg-gray-700 p-4 rounded-lg flex-grow transition-colors duration-200">
-                    <h3 class="font-semibold mb-2 text-gray-800 dark:text-white">Keywords</h3>
+                <div id="keywords" class="drop-zone bg-white p-4 rounded-lg flex-grow">
+                    <h3 class="font-semibold mb-2 text-gray-800">Keywords</h3>
                     <div id="keywordZone" class="min-h-[50px]"></div>
                 </div>
-                <div id="filters" class="drop-zone bg-gray-100 dark:bg-gray-700 p-4 rounded-lg flex-grow transition-colors duration-200">
-                    <h3 class="font-semibold mb-2 text-gray-800 dark:text-white">Filters</h3>
+                <div id="filters" class="drop-zone bg-white p-4 rounded-lg flex-grow">
+                    <h3 class="font-semibold mb-2 text-gray-800">Filters</h3>
                     <div id="filterZone" class="min-h-[50px]"></div>
                 </div>
             </div>
             <div id="elementPalette" class="flex flex-wrap gap-4 mb-4">
-                <div class="draggable bg-blue-100 dark:bg-blue-700 p-2 rounded transition-colors duration-200" draggable="true" data-type="keyword">Keyword</div>
-                <div class="draggable bg-green-100 dark:bg-green-700 p-2 rounded transition-colors duration-200" draggable="true" data-type="filter" data-filter="site:">Site Filter</div>
-                <div class="draggable bg-yellow-100 dark:bg-yellow-700 p-2 rounded transition-colors duration-200" draggable="true" data-type="filter" data-filter="filetype:">File Type Filter</div>
-                <div class="draggable bg-red-100 dark:bg-red-700 p-2 rounded transition-colors duration-200" draggable="true" data-type="filter" data-filter="-">Exclude</div>
-                <div class="draggable bg-purple-100 dark:bg-purple-700 p-2 rounded transition-colors duration-200" draggable="true" data-type="filter" data-filter="OR">OR Operator</div>
+                <div class="draggable bg-blue-100 p-2 rounded" draggable="true" data-type="keyword">Keyword</div>
+                <div class="draggable bg-green-100 p-2 rounded" draggable="true" data-type="filter" data-filter="site:">Site Filter</div>
+                <div class="draggable bg-yellow-100 p-2 rounded" draggable="true" data-type="filter" data-filter="filetype:">File Type Filter</div>
+                <div class="draggable bg-red-100 p-2 rounded" draggable="true" data-type="filter" data-filter="-">Exclude</div>
+                <div class="draggable bg-purple-100 p-2 rounded" draggable="true" data-type="filter" data-filter="OR">OR Operator</div>
             </div>
             <button id="visualSearchButton" class="bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 transition-colors">
                 Search with Visual Builder
@@ -119,44 +112,44 @@
         </div>
 
         <!-- Search Results -->
-        <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6 mb-8 transition-colors duration-200">
-            <h2 class="text-2xl font-semibold mb-4 text-gray-800 dark:text-white">Search Results</h2>
+        <div class="bg-gray-100 shadow-md rounded-lg p-6 mb-8">
+            <h2 class="text-2xl font-semibold mb-4 text-gray-800">Search Results</h2>
             <div class="gcse-searchresults-only"></div>
         </div>
 
         <!-- Quick Access Apps Section -->
-        <div class="bg-white dark:bg-gray-800 shadow-md rounded-lg p-6 mb-8 transition-colors duration-200">
-            <h2 class="text-2xl font-semibold mb-4 text-gray-800 dark:text-white">Quick Access Apps</h2>
+        <div class="bg-gray-100 shadow-md rounded-lg p-6 mb-8">
+            <h2 class="text-2xl font-semibold mb-4 text-gray-800">Quick Access Apps</h2>
             <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
-                <a href="https://chat.openai.com" target="_blank" class="quick-access-app bg-green-100 dark:bg-green-700 p-4 rounded-lg text-center transition-colors duration-200">
+                <a href="https://chat.openai.com" target="_blank" class="quick-access-app bg-green-100 p-4 rounded-lg text-center">
                     <img src="https://upload.wikimedia.org/wikipedia/commons/0/04/ChatGPT_logo.svg" alt="ChatGPT" class="w-12 h-12 mx-auto mb-2">
-                    <span class="text-sm font-medium text-gray-800 dark:text-white">ChatGPT</span>
+                    <span class="text-sm font-medium text-gray-800">ChatGPT</span>
                 </a>
-                <a href="https://www.google.com" target="_blank" class="quick-access-app bg-blue-100 dark:bg-blue-700 p-4 rounded-lg text-center transition-colors duration-200">
+                <a href="https://www.google.com" target="_blank" class="quick-access-app bg-blue-100 p-4 rounded-lg text-center">
                     <img src="https://www.google.com/images/branding/googlelogo/1x/googlelogo_color_272x92dp.png" alt="Google" class="w-12 h-12 mx-auto mb-2 object-contain">
-                    <span class="text-sm font-medium text-gray-800 dark:text-white">Google</span>
+                    <span class="text-sm font-medium text-gray-800">Google</span>
                 </a>
-                <a href="https://www.youtube.com" target="_blank" class="quick-access-app bg-red-100 dark:bg-red-700 p-4 rounded-lg text-center transition-colors duration-200">
+                <a href="https://www.youtube.com" target="_blank" class="quick-access-app bg-red-100 p-4 rounded-lg text-center">
                     <img src="https://www.youtube.com/s/desktop/18284868/img/favicon_144x144.png" alt="YouTube" class="w-12 h-12 mx-auto mb-2">
-                    <span class="text-sm font-medium text-gray-800 dark:text-white">YouTube</span>
+                    <span class="text-sm font-medium text-gray-800">YouTube</span>
                 </a>
-                <a href="https://www.github.com" target="_blank" class="quick-access-app bg-gray-100 dark:bg-gray-700 p-4 rounded-lg text-center transition-colors duration-200">
+                <a href="https://www.github.com" target="_blank" class="quick-access-app bg-gray-200 p-4 rounded-lg text-center">
                     <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub" class="w-12 h-12 mx-auto mb-2">
-                    <span class="text-sm font-medium text-gray-800 dark:text-white">GitHub</span>
+                    <span class="text-sm font-medium text-gray-800">GitHub</span>
                 </a>
-                <a href="https://www.stackoverflow.com" target="_blank" class="quick-access-app bg-orange-100 dark:bg-orange-700 p-4 rounded-lg text-center transition-colors duration-200">
+                <a href="https://www.stackoverflow.com" target="_blank" class="quick-access-app bg-orange-100 p-4 rounded-lg text-center">
                     <img src="https://cdn.sstatic.net/Sites/stackoverflow/Img/apple-touch-icon.png?v=c78bd457575a" alt="Stack Overflow" class="w-12 h-12 mx-auto mb-2">
-                    <span class="text-sm font-medium text-gray-800 dark:text-white">Stack Overflow</span>
+                    <span class="text-sm font-medium text-gray-800">Stack Overflow</span>
                 </a>
-                <a href="https://www.linkedin.com" target="_blank" class="quick-access-app bg-blue-100 dark:bg-blue-700 p-4 rounded-lg text-center transition-colors duration-200">
+                <a href="https://www.linkedin.com" target="_blank" class="quick-access-app bg-blue-100 p-4 rounded-lg text-center">
                     <img src="https://content.linkedin.com/content/dam/me/business/en-us/amp/brand-site/v2/bg/LI-Bug.svg.original.svg" alt="LinkedIn" class="w-12 h-12 mx-auto mb-2">
-                    <span class="text-sm font-medium text-gray-800 dark:text-white">LinkedIn</span>
+                    <span class="text-sm font-medium text-gray-800">LinkedIn</span>
                 </a>
             </div>
         </div>
 
         <!-- Market Data Section -->
-        <div class="market-section transition-colors duration-200">
+        <div class="market-section">
             <div class="flex items-center justify-between mb-6">
                 <h2 class="text-2xl font-bold flex items-center">
                     <svg class="w-8 h-8 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -200,7 +193,7 @@
             const visualSearchButton = document.getElementById('visualSearchButton');
 
             draggables.forEach(draggable => {
-                draggable.addEventListener('dragstart', dragStart);
+                draggable.addEventListener('dragstartdraggable.addEventListener('dragstart', dragStart);
             });
 
             dropZones.forEach(zone => {
@@ -238,13 +231,13 @@
                 if (element.dataset.type === 'keyword') {
                     const input = document.createElement('input');
                     input.type = 'text';
-                    input.className = 'border rounded px-2 py-1 ml-2 dark:bg-gray-700 dark:text-white';
+                    input.className = 'border rounded px-2 py-1 ml-2';
                     input.placeholder = 'Enter keyword';
                     element.appendChild(input);
                 } else if (element.dataset.type === 'filter' && element.dataset.filter !== 'OR' && element.dataset.filter !== '-') {
                     const input = document.createElement('input');
                     input.type = 'text';
-                    input.className = 'border rounded px-2 py-1 ml-2 dark:bg-gray-700 dark:text-white';
+                    input.className = 'border rounded px-2 py-1 ml-2';
                     input.placeholder = 'Enter value';
                     element.appendChild(input);
                 }
