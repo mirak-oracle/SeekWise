@@ -40,20 +40,6 @@
 
     <style>
 
-        .search-placeholder {
-    height: 40px;
-    background-color: #f3f4f6;
-    animation: pulse 1.5s infinite;
-}
-
-@keyframes pulse {
-    0%, 100% {
-        opacity: 1;
-    }
-    50% {
-        opacity: 0.5;
-    }
-}
         .market-section {
 
             background: linear-gradient(to right, #1a237e, #0d47a1);
@@ -156,25 +142,9 @@
 
             <!-- Google Custom Search Box -->
 
-            <div id="search-container" class="w-full max-w-2xl">
-    <div id="search-placeholder" class="search-placeholder rounded-md mb-4"></div>
-    <div id="search-box" class="hidden">
-        <div class="gcse-searchbox-only"></div>
-    </div>
-</div>
-                
-<script>
-    function checkGCSELoaded() {
-        if (document.querySelector('.gsc-control-cse')) {
-            document.getElementById('search-placeholder').style.display = 'none';
-            document.getElementById('search-box').classList.remove('hidden');
-        } else {
-            setTimeout(checkGCSELoaded, 100);
-        }
-    }
+            <div class="gcse-searchbox-only"></div>
 
-    window.addEventListener('load', checkGCSELoaded);
-</script>
+
 
             <!-- Quick Access -->
 
